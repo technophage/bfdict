@@ -307,7 +307,7 @@ def main():
     # process options
     if options.inter:
         bf.interactivesetup()
-    elif len(options.custdict) > 0:
+    elif options.custdict:
         bf.uselower = False
         bf.useupper = False
         bf.usenumber = False
@@ -322,7 +322,7 @@ def main():
         bf.useupper = options.useupper
         bf.usenumber = options.usenumber
         bf.usesymbol = options.usesymbol
-        if len(options.outputfile) > 0:
+        if options.outputfile:
             bf.outputfile = options.outputfile
 
     if (len(sys.argv)>1):
