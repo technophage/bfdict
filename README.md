@@ -28,4 +28,20 @@ Can also be used as an importable module like this;
 	while passwd:
 		print(des_crypt.hash(passwd))
 		passwd = bf.nextword()
+	
+
+	or
+
+
+	from passlib.hash import des_crypt
+	from bfdict import bfdict
+
+	bf = bfdict()
+
+	bf.interactivesetup()	
+
+	passwd = bf.nextword()
+	while passwd:
+		print(des_crypt.hash(passwd))
+		passwd = bf.nextword()
 
