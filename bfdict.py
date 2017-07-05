@@ -19,15 +19,70 @@ from optparse import OptionParser
 
 class bfdict(object):
 
+    '''
+
+    #
+    # Option variables
+    #
+
+    these must be set so we have our upper an lower limits for generation;
+
+    mnlen       int     minimum/starting word length
+    mxlen       int     maximum word length
+
+    validated by    
+        mnlen >= 1
+        mxlen >= mnlen
+
+    at least one of these must be set, so we have chars to work with;
+
+    uselower    flag    True/False  enables std lowercase chars
+    useupper    flag    True/False  enables std uppercase chars
+    usenumber   flag    True/False  enables number chars
+    usesymbol   flag    True/False  enables keyboard symbol chars
+
+    if this is set it overides the previous char set flags
+    
+    usecustom   flag    True/False if set assign a string of the chars to customdict
+    customdict  list/str
+
+    optional;
+
+    prepend     str     sets a static prepend string to the begging of generated word
+    apend       str     sets a static apend string to the end of generated word
+
+    outputfile          this is only really useful if your writing a new front end, or really just want to dump to a file
+
+    #
+    # callable functions
+    #
+
+    interactivesetup    interactive setup annoyingly asks you questions so you dont have to set the options above
+    
+    next_word           returns a string using the options you set, increments counters so  on the next call it will return the
+                        next sting in sequence. after the last word is produced returns null
+
+    dump_dict           looped next_word calling function, that writes to file if option is set
+
+
+    
+    '''
+
     # class vars
     #
 
+    # predefined char sets
     lower = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
     upper = [ 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     number = [ '0','1','2','3','4','5','6','7','8','9']
     symbol = [ ',','.',';',':','@','#','~','[','{',']','}','!','"',"'",'£','$','%','^','&','*','(',')','-','_','=','+','|','?',' ']
-    customdict = []
 
+    # user defined char sets / strings
+    customdict = []
+    prepend = ""
+    apend = ""
+
+    # use flags
     uselower = False
     useupper = False
     usenumber = False
@@ -35,7 +90,8 @@ class bfdict(object):
     usecustom = False
 
     outputfile = ''
-    
+
+    # working vars
     ci = []
     cl = []
     mnlen = 0
@@ -216,6 +272,22 @@ class bfdict(object):
             except:
                 pass
 
+        # prepend
+        try:
+            resp = str(raw_input('[+] prepend string to word (y/n) : '))
+            if resp[0].lower() == 'y':
+                self.prepend = str(raw_input('[+] enter string : '))
+        except:
+           pass
+            
+        # apend
+        try:
+            resp = str(raw_input('[+] apend string to word (y/n) : '))
+            if resp[0].lower() == 'y':
+                self.apend = str(raw_input('[+] enter string : '))
+        except:
+           pass
+
         # fileoutput
         try:
             resp = str(raw_input('[+] output to file (y/n) : '))
@@ -229,30 +301,38 @@ class bfdict(object):
     
     def dumpdict(self):
 
-        fo=False
+        try:
+            fo=False
+            wc = 0
 
-        # if a filename is set, assume were outputting to file
-        if len(self.outputfile) > 0:
-            try:
-                f = open(self.outputfile, 'w')
-                fo=True
-            except:
-                print '[*][bfdict] Error opening file ' + self.outputfile
-                exit[0]
+            # if a filename is set, assume were outputting to file
+            if len(self.outputfile) > 0:
+                try:
+                    f = open(self.outputfile, 'w')
+                    fo=True
+                except:
+                    print '[*][bfdict] Error with file ' + self.outputfile
+                    exit[0]
 
-        # write to file, else print to screen
-        wrd = self.nextword()
-        while wrd:
-            if fo:
-                f.write(wrd + '\n')
-            else:
-                print wrd
+            # write to file, else print to screen
             wrd = self.nextword()
+            while wrd:
+                if fo:
+                    f.write(wrd + '\n')
+                else:
+                    print wrd
+                wc += 1
+                wrd = self.nextword()
 
-        # close file handler
-        if fo:
-            f.close()
-            fo = False
+            # close file handler
+            if fo:
+                f.close()
+                fo = False
+        except KeyboardInterrupt:
+            print("[-][bfdict] Caught keyboard interrupt.")
+            print("[-][bfdict] Quitting after " + str(wc) + "words.")
+            return
+            
 
     #
     #
@@ -268,6 +348,10 @@ class bfdict(object):
             word = ''
             for x in range(0, self.clen):
                 word = self.cl[self.ci[x]] + word
+                if self.prepend:
+                    word = self.prepend + word
+                if self.apend:
+                    word = word + self.apend
             self.ci[0] += 1
             if self.ci[0] > self.cl[0]:
                 for x in range(0, self.mxlen):
@@ -298,6 +382,8 @@ def main():
     parser.add_option("-u", action="store_true", dest="useupper", help="Use uppercase characters", default=False)
     parser.add_option("-n", action="store_true", dest="usenumber", help="Use number characters", default=False)
     parser.add_option("-s", action="store_true", dest="usesymbol", help="Use standard symbols", default=False)
+    parser.add_option("-p", action="store", type="string", dest="prepend", help="String to prepend to generated word", default="")
+    parser.add_option("-a", action="store", type="string", dest="apend", help="String to apend to generated word", default="")
     parser.add_option("-c", action="store", type="string", dest="custdict", help="Set custom character set", default='')
     parser.add_option("-f", action="store", type="string", dest="outputfile", help="Output filename [Default is to screen]", metavar="FILE", default='')
     (options, args) = parser.parse_args()
@@ -313,6 +399,10 @@ def main():
         bf.usenumber = False
         bf.usesymbol = False
         bf.usecustom = True
+        if options.prepend:
+            bf.prepend = options.prepend
+        if options.apend:
+            bf.apend = options.apend
         for x in range(0, len(custdict)):
             bf.customdict.append(custdict[n])
     else:
@@ -322,6 +412,10 @@ def main():
         bf.useupper = options.useupper
         bf.usenumber = options.usenumber
         bf.usesymbol = options.usesymbol
+        if options.prepend:
+            bf.prepend = options.prepend
+        if options.apend:
+            bf.apend = options.apend
         if options.outputfile:
             bf.outputfile = options.outputfile
 
