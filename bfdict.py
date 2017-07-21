@@ -35,98 +35,101 @@ class bfdict(object):
 
     '''
 
-    Module documentation
+    [Module documentation:]
 
-    #---------------------------------------------------------------------------------------------------------------------------------------------
-    # Option variables
-    #---------------------------------------------------------------------------------------------------------------------------------------------
+        Paramiters:
 
-    ** setting these is mandatory! **
+                ** setting these is mandatory! **
 
-    these must be set so we have our upper an lower limits for generation;
+                these must be set so we have our upper an lower limits for generation;
 
-    mnlen       int     minimum/starting word length
-    mxlen       int     maximum word length
+                .mnlen       int     minimum/starting word length
+                .mxlen       int     maximum word length
 
-    validated by:    
-        mnlen >= 1
-        mxlen >= mnlen
+                validated by:
+                        mnlen >= 1
+                        mxlen >= mnlen
 
-    ** at least one of these must be set, so we have chars to work with; **
 
-    uselower    flag    True/False  enables std lowercase chars
-    useupper    flag    True/False  enables std uppercase chars
-    usenumber   flag    True/False  enables number chars
-    usesymbol   flag    True/False  enables keyboard symbol chars
+                ** at least one of these must be set, so we have chars to work with; **
 
-    if this next one is set it overides all the previous char set flags, and sets them to False;
-    
-    usecustom   flag    True/False if set assign a string of the chars to customdict
-    customdict  list/str
+                        .uselower    flag    True/False  enables std lowercase chars
+                        .useupper    flag    True/False  enables std uppercase chars
+                        .usenumber   flag    True/False  enables number chars
+                        .usesymbol   flag    True/False  enables keyboard symbol chars
 
-    ** optional options **
+						alternitavley the use of these overides all the previous char set flags, and setting them to false.
+						it requires you set the string of chars you want or it will error.
 
-    prepend     str     sets a static prepend string to the begging of generated word
-    append      str     sets a static append string to the end of generated word
+                        .usecustom   flag    True/False if set assign a string of the chars to customdict
+                        .customdict  str
 
-    outputfile          this is only really useful if your writing a new front end, as its only used by dump_dict function.
+                ** optional options **
 
-    #---------------------------------------------------------------------------------------------------------------------------------------------
-    # callable functions
-    #---------------------------------------------------------------------------------------------------------------------------------------------
+                        .prepend     str     sets a static prepend string to the begining of generated word
+                        .append      str     sets a static append string to the end of generated word
 
-    interactivesetup    interactive setup annoyingly asks you questions so you dont have to set the options above
-    
-    next_word           returns the next word in sequence using the options you set, increments counters so on the next call it will return the
-                        next in sequence. after the last word is produced returns null
 
-    savestate(optional filename])
-    
-                        uses pickle to save the in memory bfdict object to file, this should generally br used in consort with loadstate().
-                        if no filename is passed it attempts to use '.bfdict' in the current working directory.
 
-                        in order to use this, in the main loop of your program, place a KeyboardInterrupt exception handler, which calls
 
-                        --
-                        [object].savestate([optional filename])
-                        --
-                        
-                        or even;
+   Callable meathods:
 
-                        --
-                        if [object].resumesave:
-                            [object].savestate([optional filename])
-                        --
 
-                        if your setting the resumesave flag.
-                        
-    loadstate([optional filename])
-    
-                        load previous bfdict instance object from file to resume from a previous run. if a filename is not passed it will attermpt
-                        to load '.bfdict' from the current working directiory.
+                .interactivesetup()
+					
+					Interactive setup annoyingly asks you questions so you dont have to set the options
+					in the script.
 
-                        to use this call
-                        
-                        --
-                        [object].loadstate([optional filname])
-                        --
+                .next_word()
+				
+					Returns the next word in sequence using the options you set,
+					Increments counters so on the next call it will return the word next in sequence.
+					
+					After the last word is produced returns null.
 
-                        this also sets the resumesave flag to True, assuming if your resuming once you might like to do it again.
+                .savestate(filename)
 
-                        this can be run automagically if the file exists by wrapping it in a simple file existance check;
+					Uses cPickle to save the in memory bfdict object to file,
+					this should generally be used in consort with .loadstate()
 
-                        --
-                        import os
-                        import bfdict from bfdict
+					If no filename is passed it attempts to use '.bfdict' in the modules
+					working directory.
 
-                        [object] = bfdict()
-                        
-                        if os.path.isfile([filename]):
-                            [object].loadstate([filename])
-                        --
+					In order to use this automatically, in the main loop of your program,
+					place a KeyboardInterrupt exception handler, which calls
 
-    EOD.
-    #---------------------------------------------------------------------------------------------------------------------------------------------
+
+					[object].savestate(filename)
+
+						or even;
+
+					if [object].resumesave:
+						[object].savestate(filename)
+
+
+                .loadstate(filename)
+
+						Load previous bfdict instance object from file to resume from a previous run.
+						
+						If a filename is not passed it will attermpt to load '.bfdict' in the
+						modules working directory.
+
+						To use this call;
+							
+							[object].loadstate(filename)
+						
+						This also sets the resumesave flag to True, assuming if your resuming 
+						once you might like to do it again. This can be run automagically if 
+						the file exists by wrapping it in a simple file existance check;
+						
+							import os
+							import bfdict from bfdict
+
+							bf = bfdict()
+							resume_file = '.bf_resume'
+
+							if os.path.isfile(resume_file):
+								bf.loadstate(resume_file)
     
     '''
 
