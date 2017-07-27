@@ -1,0 +1,37 @@
+-[ Bugs ]------------------------------------------------
+
+	Option parsing / setup validation
+
+		mnlen == mxlen, fails with mnlen <= 0 error, 
+
+		./bfdict.py -m 7 -x 7 -c abcdefABCDEF0123456789 -f bf_hex_7.txt
+		[*][bfdict.setdict] Minimum word length MUST be larger than 0
+		[*][bfdict.setdict] self.mnlen == 0
+
+
+
+
+
+-[ Annoyances ]------------------------------------------
+
+	CTRL-C handler in interactive setup
+
+
+
+-[ Features to add ]-------------------------------------
+
+	silent (no screen output) other than words for STDIO pipes
+
+	output sizing summary (words / bytes) when in file mode
+
+	just output sizing info based on passed options
+
+	prompt for run cycles generating more than 2Gb data, with option to quit
+
+	option to break files down to 2G max, treat filename as base filename, add numbered extension
+	formatted for 6 decimals '.000000', add this an after the fact option in large run confirmation
+
+	auto activate resume flag for runs generating more than 2Gb data, and writing to file
+
+
+
