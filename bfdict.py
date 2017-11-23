@@ -562,6 +562,8 @@ def main():
         if options.inter:
             bf.interactivesetup()
         elif options.custdict:
+            bf.mnlen = options.mnlen
+            bf.mxlen = options.mxlen
             bf.uselower = False
             bf.useupper = False
             bf.usenumber = False
@@ -572,7 +574,7 @@ def main():
             if options.append:
                 bf.append = options.append
             for x in range(0, len(custdict)):
-                bf.customdict.append(custdict[n])
+                bf.customdict.append(custdict[x])
         else:
             bf.mnlen = options.mnlen
             bf.mxlen = options.mxlen
