@@ -1,15 +1,6 @@
 -[ Bugs ]------------------------------------------------
 
-	Option parsing / setup validation
-
-		mnlen == mxlen, fails with mnlen <= 0 error, 
-
-		./bfdict.py -m 7 -x 7 -c abcdefABCDEF0123456789 -f bf_hex_7.txt
-		[*][bfdict.setdict] Minimum word length MUST be larger than 0
-		[*][bfdict.setdict] self.mnlen == 0
-
-
-
+	Nothing currently..
 
 
 -[ Annoyances ]------------------------------------------
