@@ -178,7 +178,7 @@ def main():
 
 
                                 # if we get to here with +1, it passed the tests
-                                if bk = 1:
+                                if bk == 1:
                                         outfile.write(word)
                                         ow += 1
         except IOError:
