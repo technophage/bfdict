@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 banner = '''
-        fettled.py
 
-        Simple wordlist fettling tool        
-                  sin@technophage.net
-
+<fettled.py>  Simple wordlist fettling tool        
+                        sin@technophage.net
+                        
 '''
 
 
@@ -19,6 +18,7 @@ from optparse import OptionParser
 
 def human_chars(word):
         for c in word:
+                # 'normal' typable ascii chars
                 if ((ord(c) >= 33) and (ord(c) <= 127)):
                         return True
                 else:
@@ -58,6 +58,7 @@ def main():
         else:
                 print(banner)
                 parser.print_help()
+                print('\n')
                 exit(0)
 
         # of
@@ -95,8 +96,8 @@ def main():
         # 
         # display settings
 
-      
-        print('Summary ::')
+        print('\n')
+        print('--[ Summary ]-----')
 
         if mnlen_check:
                 print('\tminimum length   : {}'.format(str(mnlen)))
@@ -109,9 +110,9 @@ def main():
                 print('\tmaximum length   : none')
                 
         if human_check:
-                print('\tcharacters      : keyboard typable')
+                print('\tcharacters       : keyboard typable')
         else:
-                print('\tcharacters      : any')
+                print('\tcharacters       : any')
         
         print('\tinput file       : {}'.format(input_file))
         print('\toutput file      : {}'.format(output_file))
@@ -204,13 +205,13 @@ def main():
         #
         # display summary info
 
-        print('Statistics ::')
+        print('--[ Statistics ]-----')
 
         print('\tinput file       : {}'.format(input_file))
         print('\twords read       : {}'.format(str(iw)))
-        print('')
         print('\toutput file      : {}'.format(output_file))
         print('\twords output     : {}'.format(str(ow)))
+        print('\n\n')        
 
 
         # bye bye
