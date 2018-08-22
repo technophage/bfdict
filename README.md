@@ -22,6 +22,7 @@ So you can run it as a standalone script;
 
 	./bfdict.py
 or
+
 	python bfdict.py
 
 
