@@ -42,7 +42,7 @@ def main():
         parser.add_option("-o", action="store", type="string", dest="output_file", help="output file")
         parser.add_option("-m", action="store", type="int", dest="mnlen", help="define minimum word length", default=0)        
         parser.add_option("-x", action="store", type="int", dest="mxlen", help="define maximum word length", default=0)
-        parser.add_option("-k", action="store_true", dest="human_check", help="filter for only keyboard typable characters", default=False)
+        parser.add_option("-k", action="store_true", dest="human_check", help="filter for keyboard typable characters", default=False)
 
         (options, args) = parser.parse_args()
 
@@ -183,7 +183,7 @@ def main():
                                         outfile.write(word)
                                         ow += 1
         except IOError:
-                print('Problem opening ' + input_file + ' for input')
+                print('Problem opening {} for input'.format(input_file))
                 print('Quitting..')
                 exit(0)
                 
