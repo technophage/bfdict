@@ -575,6 +575,8 @@ def main():
                 bf.append = options.append
             for x in range(0, len(custdict)):
                 bf.customdict.append(custdict[x])
+            if options.outputfile:
+                bf.outputfile = options.outputfile
         else:
             bf.mnlen = options.mnlen
             bf.mxlen = options.mxlen
