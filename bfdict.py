@@ -505,10 +505,6 @@ class bfdict(object):
             word = ''
             for x in range(0, self.clen):
                 word = self.cl[self.ci[x]] + word
-                if self.prepend:
-                    word = self.prepend + word
-                if self.append:
-                    word = word + self.append
             self.ci[0] += 1
             if self.ci[0] > self.cl[0]:
                 for x in range(0, self.mxlen):
@@ -517,7 +513,14 @@ class bfdict(object):
                         self.ci[x+1] += 1
                         if (x+1) == self.clen:
                             self.clen += 1
+
+            if self.prepend:
+                    word = self.prepend + word
+            if self.append:
+                    word = word + self.append
+                            
             return word
+        
         else:
             return
 
