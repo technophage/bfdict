@@ -41,6 +41,7 @@ from optparse import OptionParser
 def mutate(word, crp, num, wcs):
 
     mutations = []
+    bwl = []
 
     word = str(word)
 
@@ -49,38 +50,28 @@ def mutate(word, crp, num, wcs):
     wcsl = {'e':'3', 'o':'0', 'i':'1', 't':'7', 's':'5', 'a':'4'}       # warez type char subs
     symb = ['@','!','$','.']
 
-    word = word.strip()                                                 # strip charage return
-    mutations.append(word)                                              # add it straight back to the out put list, sans crlf
+    word = word.strip('\n')                                             # strip charage return
 
     if crp:                                                             # corp style transformations
         mutations.append(word.lower())                                  # lower
         mutations.append(word.upper())                                  # UPPER
         mutations.append(word.capitalize())                             # Capitalize
 
-
-        # these are now the base words, and all subsiquent change need to be applied to all of them
-        bwl = mutations
-
+        bwl = list(mutations)                                           # !!!
 
     for bw in bwl:
 
         if num or crp:                                                      # numeric/corp style transformations
             for n in nbounds:                                               # basic number 1,2,3
-                tw = word + '{}'.format(n)
-                mutations.append(tw)
+                mutations.append(bw + '{}'.format(n))
 
             for n in nbounds:                                               # formatted numbers 01,02,03
-                tw = word + '{:02}'.format(n)
-                mutations.append(tw)
+                mutations.append(bw + '{:02}'.format(n))
 
             for y in years:                                                 # years 1980..2020
-
-                tw = word + '{}'.format(y)
-
                 if crp:
-                    mutations.append(tw)
-
-
+                    mutations.append(bw + '{}'.format(y))
+                    
         '''
         if wcs:                                                             # warez style char substitutions
             tw = word
@@ -100,14 +91,20 @@ def mutate(word, crp, num, wcs):
 
     # sort to ensure unique list
 
-    mutations = set(mutations)
+    unique_mutations = sorted(set(mutations))
 
 
     # return mutations
 
+    ##############################
+    ##############################
     # debug dump
-    for w in mutations:
-            print(w)
+    
+    for w in unique_mutations:
+            print("\t{}".format(w))
+
+    ##############################
+    ##############################
 
 def main():
 
@@ -166,9 +163,9 @@ def main():
 
                 exit(0)
 
-            # other issue !!1!..?
-            except:
-                pass
+    # other issue !!1!..?
+    except:
+        pass
 
 
 
