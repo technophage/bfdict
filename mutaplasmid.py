@@ -61,20 +61,20 @@ def mutate(word, crp, num, wcs):
         # these are now the base words, and all subsiquent change need to be applied to all of them
         bwl = mutations
 
-        
+
     for bw in bwl:
-    
+
         if num or crp:                                                      # numeric/corp style transformations
             for n in nbounds:                                               # basic number 1,2,3
                 tw = word + '{}'.format(n)
-                mutations.append(tw)                 
+                mutations.append(tw)
 
             for n in nbounds:                                               # formatted numbers 01,02,03
                 tw = word + '{:02}'.format(n)
-                mutations.append(tw) 
+                mutations.append(tw)
 
             for y in years:                                                 # years 1980..2020
-                
+
                 tw = word + '{}'.format(y)
 
                 if crp:
@@ -97,44 +97,44 @@ def mutate(word, crp, num, wcs):
         '''
 
     # finished the base word loop
-            
+
     # sort to ensure unique list
 
     mutations = set(mutations)
 
 
     # return mutations
-    
+
     # debug dump
     for w in mutations:
             print(w)
 
 def main():
 
-    
+
     #
     # process command switches
-        
+
     parser = OptionParser()
     parser.add_option("-i", action="store", type="string", dest="input_file", help="input file")
     parser.add_option("-o", action="store", type="string", dest="output_file", help="output file")
-    parser.add_option("-w", action="store_true", dest="wareify", help="Warezify", default=False)        
+    parser.add_option("-w", action="store_true", dest="wareify", help="Warezify", default=False)
     parser.add_option("-n", action="store_true", dest="numify", help="Add iterative numbers", default=False)
-    parser.add_option("-c", action="store_true", dest="corpify", help="Corporate password policyificate", default=False)    
+    parser.add_option("-c", action="store_true", dest="corpify", help="Corporate password policyificate", default=False)
 
     (options, args) = parser.parse_args()
-    
+
     try:
         if os.path.isfile(options.input_file):
-            
+
             try:
                 ouf = open(output_file, 'w')
-            
+
             except:
                 print('Unable to open {} for output'.format(output_file))
                 print('Quitting')
                 exit(0)
-            
+
             try:
                 with open(input_file, 'r') as inf:
                     for line in inf:
@@ -143,7 +143,7 @@ def main():
             except KeyboardInterupt:
                 print('CTRL-C Caught')
                 print('Quitting..')
-                
+
                 try:
                     inf.close()
                     out.close()
@@ -152,12 +152,12 @@ def main():
 
                 exit(0)
 
-                
+
             # file error
             except IOError:
                 print('Error with {}'.format(input_file))
                 print('Quitting.')
-                
+
                 try:
                     inf.close()
                     ouf.close()
@@ -165,14 +165,13 @@ def main():
                     pass
 
                 exit(0)
-            
+
             # other issue !!1!..?
             except:
                 pass
 
 
 
-            
 if __name__ == '__main__':
     main()
 
