@@ -3,29 +3,29 @@
 
 banner = '''
 
-<mutagen.py>           Simple wordlist mutation tool
-                                 sin@technophage.net
+<mutaplasmid.py>                                    Simple wordlist mutation tool
+                                                              sin@technophage.net
 
 
-This is mostly designed for cracking corporate
-style, 'you must change you password in x days',
-and use X y and z characters.
+This is mostly designed for cracking corporate style 'you must change your
+password in x days' and use X,y and z characters. From experiance ppl seem
+to pick sports teams, places and names; prepended by dates and/or the obligatory
+symbol.
 
-From experiance ppl seem to pick sports teams,
-places, names and dates, then mutate them for
-the rules been inflicted on them.
+Some ppl then get tricky and character substitute, like all 'e' with '3' :)
 
-Then at the end of the month after finally
-getting to grips and confirtable with the password,
-they have to change it, making 90% of ppl add or
-increment a number to the back
+Then at the end of the month after finally getting to grips with the unmemorable
+password, they have to change it. Making 99% of ppl add or increment a number to
+the back.
 
-Sound simple enough, but the possible mutations
-for a word like 'Arsenal' are obcence, and definatly
-something that should be done by a machine.
 
-Use with care, this could easily increase your files
-by thousands of times.
+Sound simple enough, but the possible mutations for a simple word like 'Balls'
+are obscence, and definatly something that should be done by a machine.
+
+This will cause an epic amount of bloat, and as such id stick to simple word lists
+like names, sports teams and the like.
+
+
 
 '''
 
@@ -38,56 +38,104 @@ from optparse import OptionParser
 
 
 
-def mutate(word, crp, num, wcs):
+def mutate(word, cap, num, yrs, sym, wcs):
+
 
     mutations = []
-    bwl = []
 
-    word = str(word)
+    word = str(word).strip('\n')
 
-    nbounds = range(0, 20)
-    years = range(1980, 2020)
-    wcsl = {'e':'3', 'o':'0', 'i':'1', 't':'7', 's':'5', 'a':'4'}       # warez type char subs
+    nbnds = range(0, 20)
+    years = range(1950, 2020)
+    
+    wcsl = {'e':'3', 'o':'0', 'i':'1', 't':'7', 's':'5', 'a':'4', 'S':'$', 'E':'£'}
     symb = ['@','!','$','.']
 
-    word = word.strip('\n')                                             # strip charage return
 
-    if crp:                                                             # corp style transformations
-        mutations.append(word.lower())                                  # lower
-        mutations.append(word.upper())                                  # UPPER
-        mutations.append(word.capitalize())                             # Capitalize
 
-        bwl = list(mutations)                                           # !!!
 
-    for bw in bwl:
 
-        if num or crp:                                                      # numeric/corp style transformations
-            for n in nbounds:                                               # basic number 1,2,3
-                mutations.append(bw + '{}'.format(n))
+    # capitilisation
 
-            for n in nbounds:                                               # formatted numbers 01,02,03
-                mutations.append(bw + '{:02}'.format(n))
+    if cap:
+        mutations.append(word.lower())
+        mutations.append(word.upper())
+        mutations.append(word.capitalize())
 
-            for y in years:                                                 # years 1980..2020
-                if crp:
+    else:
+        mutations.append(word)
+
+    # ---
+
+    
+    # pre-number symbol
+    
+    if sym:
+        prbwl = list(mutations)
+
+        for bw in prbwl:
+            for s in symb:
+                mutations.append('{}{}'.format(bw, s))
+        
+    # ---
+
+    
+    # numeric
+
+    if num or yrs:
+
+        nbwl = list(mutations)
+
+        for bw in nbwl:
+
+            if num:
+                for n in nbnds:
+                    mutations.append(bw + '{}'.format(n))
+
+                for n in nbnds:
+                    mutations.append(bw + '{:02}'.format(n))
+
+
+
+            if yrs:
+                for y in years:
                     mutations.append(bw + '{}'.format(y))
-                    
-        '''
-        if wcs:                                                             # warez style char substitutions
-            tw = word
-            for n in range(0, (len[tw] - 1)):
-                try:
-                    if wcsl[tw[n]]:
-                        #tw[n] = wcsl[tw[n]]
-                        #mutations.append(tw)
-                        for w in mutations:
-                            print(w)
 
-                except:
-                    pass
-        '''
+    # ---
 
-    # finished the base word loop
+    
+    # post-number symbol
+
+    if sym:
+        pobwl = list(mutations)
+
+        for bw in pobwl:
+            for s in symb:
+                mutations.append('{}{}'.format(bw, s))
+
+    # ---
+
+    
+
+
+    '''
+    # character substitution
+
+
+    if wcs:                                                             # char substitutions
+        tw = word
+        for n in range(0, (len[tw] - 1)):
+            try:
+                if wcsl[tw[n]]:
+                    tw[n] = wcsl[tw[n]]
+                    mutations.append(tw)
+                    for w in mutations:
+                        print(w)
+
+            except:
+                pass
+    '''
+
 
     # sort to ensure unique list
 
@@ -115,59 +163,33 @@ def main():
     parser = OptionParser()
     parser.add_option("-i", action="store", type="string", dest="input_file", help="input file")
     parser.add_option("-o", action="store", type="string", dest="output_file", help="output file")
-    parser.add_option("-w", action="store_true", dest="wareify", help="Warezify", default=False)
-    parser.add_option("-n", action="store_true", dest="numify", help="Add iterative numbers", default=False)
-    parser.add_option("-c", action="store_true", dest="corpify", help="Corporate password policyificate", default=False)
+    parser.add_option("-a", action="store_true", dest="all", help="Select all modifications", default=False)
+    parser.add_option("-w", action="store_true", dest="wcs", help="Character substitutions", default=False)
+    parser.add_option("-n", action="store_true", dest="num", help="Add iterative numbers", default=False)
+    parser.add_option("-y", action="store_true", dest="yrs", help="Add years", default=False)
+    parser.add_option("-c", action="store_true", dest="cap", help="Case modification", default=False)
 
     (options, args) = parser.parse_args()
 
-    try:
-        if os.path.isfile(options.input_file):
+    if options.input_file:
 
-            try:
-                ouf = open(output_file, 'w')
+        try:
+            if os.path.isfile(options.input_file):
 
-            except:
-                print('Unable to open {} for output'.format(output_file))
-                print('Quitting')
-                exit(0)
-
-            try:
-                with open(input_file, 'r') as inf:
-                    for line in inf:
-                        mutate(line, options.wareify, options.numify, options.corpify)
-            # force quit
-            except KeyboardInterupt:
-                print('CTRL-C Caught')
-                print('Quitting..')
-
-                try:
-                    inf.close()
-                    out.close()
-                except:
-                    pass
-
-                exit(0)
+                # process args, and validate here
+                # run
+    
+                pass
+        except:
+                pass
+                exit()
 
 
-            # file error
-            except IOError:
-                print('Error with {}'.format(input_file))
-                print('Quitting.')
-
-                try:
-                    inf.close()
-                    ouf.close()
-                except:
-                    pass
-
-                exit(0)
-
-    # other issue !!1!..?
-    except:
-        pass
-
-
+    else:
+            print(banner)
+            parser.print_help()
+            print('\n')
+            
 
 if __name__ == '__main__':
     main()
