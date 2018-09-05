@@ -3,9 +3,18 @@
 
 banner = '''
 
-<mutaplasmid.py>                                    Simple wordlist mutation tool
-                                                              sin@technophage.net
+<mutaplasmid.py>                                     Simple wordlist mutation tool
+                                                               sin@technophage.net
 
+
+**                                                                              **
+**    With all the options turned on This will cause an epic amount of bloat    **
+**      A single moderatly sized word could easily produce ~50k variations.     **
+**                                                                              **
+
+'''
+
+xinfo = '''
 
 This is mostly designed for cracking corporate style 'you must change your
 password in x days' and use X,y and z characters. From experiance ppl seem
@@ -20,19 +29,16 @@ the back.
 
 
 Sounds simple enough, but the possible mutations for a simple word like 'Jonathan'
-are obscence, and definatly something that should be done by a machine.
-
-
-With all the options turned on This will cause an epic amount of bloat ..
-
-.. A single word could easily produce ~50k variations.
+are obscence, and definatly something that should be scripted.
 
 With all options on single targeted names, teams or places tailored for the
 potential target are recomended.
 
-Other than that simple lists like names, sports teams and places with more
-conservative option sets will work without too much crunching.
+Other than that simple lists like names, sports teams and places with a more
+conservative option set will work without too much crunching.
 
+
+This script if free for none commercial use only.
 
 
 '''
@@ -46,6 +52,28 @@ from optparse import OptionParser
 
 
 
+########################################################################
+##
+## script defaults; modify as required
+
+## year from/to
+yf=1950
+yt=2050
+
+## formatted number from/to
+nf=0
+nt=20
+
+## character substitution table
+wcsl = {'e':'3', 'o':'0', 'i':'1', 't':'7', 's':'5', 'a':'4', 'S':'$'}
+
+## insertable symbol list
+symb = ['@','!','$','.']
+
+##
+##
+#########################################################################
+
 
 def mutate(word, cap, num, yrs, sym, wcs, dbg=False, rs=False):
 
@@ -56,12 +84,6 @@ def mutate(word, cap, num, yrs, sym, wcs, dbg=False, rs=False):
 
     nbnds = range(0, 20)
     years = range(1950, 2020)
-    
-    wcsl = {'e':'3', 'o':'0', 'i':'1', 't':'7', 's':'5', 'a':'4', 'S':'$'}
-    symb = ['@','!','$','.']
-
-
-
 
 
     # capitilisation
@@ -177,22 +199,31 @@ def main():
     # process command switches
 
     parser = OptionParser()
+    parser.add_option("--script-info", action="store_true", dest="xinfo", help="Script info", default=False)
     parser.add_option("-i", action="store", type="string", dest="input_file", help="Input file")
     parser.add_option("-o", action="store", type="string", dest="output_file", help="Output file")
     parser.add_option("-c", action="store_true", dest="cap", help="Case modification", default=False)
-    parser.add_option("-n", action="store_true", dest="num", help="Add iterative numbers", default=False)
+    parser.add_option("-s", action="store_true", dest="sym", help="Add/Insert Symbols", default=False)
+    parser.add_option("-n", action="store_true", dest="num", help="Add iterative formatted numbers", default=False)
     parser.add_option("-y", action="store_true", dest="yrs", help="Add years", default=False)
     parser.add_option("-w", action="store_true", dest="wcs", help="Character substitutions", default=False)
-    parser.add_option("-a", action="store_true", dest="all", help="Select all options", default=False)
-    # advanced tailoring
-    #parser.add_option("--year-from", action="store", type="int", dest="year-from", help="",default=1950)
-    #parser.add_option("--year-to", action="store", type="int", dest="year-to", help="",default=2020)
-    #parser.add_option("--num-from", action="store", type="int", dest="num-from", help="",default=0)
-    #parser.add_option("--num-to", action="store", type="int", dest="num-to", help="",default=20)
+    parser.add_option("-a", action="store_true", dest="all", help="Select all mutation options ** use with care **", default=False)
+    parser.add_option("--yf", action="store", type="int", dest="year_from", help="Assumes years, start year. Default={}".format(yf),default=yf)
+    parser.add_option("--yt", action="store", type="int", dest="year_to", help="Assumes years, end year. Default={}".format(yt),default=yt)
+    parser.add_option("--nf", action="store", type="int", dest="num_from", help="Assumes numbers, start number. Default={}".format(nf),default=nf)
+    parser.add_option("--nt", action="store", type="int", dest="num_to", help="Assumes numbers, end number. Default={}".format(nt),default=nt)
 
     (options, args) = parser.parse_args()
 
-    if options.input_file:
+    if options.xinfo:
+        
+        print(banner)
+        print(xinfo)
+        parser.print_help()
+
+        print('\n')
+
+    elif options.input_file:
 
         try:
             if os.path.isfile(options.input_file):
@@ -209,6 +240,7 @@ def main():
     else:
             print(banner)
             parser.print_help()
+            
             print('\n')
             
 
