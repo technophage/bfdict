@@ -126,8 +126,6 @@ def mutate(word, cap, num, yrs, sym, wcs, dbg=False, rs=False):
                 for n in nbnds:
                     mutations.append(bw + '{:02}'.format(n))
 
-
-
             if yrs:
                 for y in years:
                     mutations.append(bw + '{}'.format(y))
@@ -177,8 +175,6 @@ def mutate(word, cap, num, yrs, sym, wcs, dbg=False, rs=False):
     # return mutations
 
 
-
-
     ##############################
     # debug
 
@@ -226,14 +222,60 @@ def main():
     elif options.input_file:
 
         try:
-            if os.path.isfile(options.input_file):
 
-                # process args, and validate here
-                # run
+            ##
+            ## mutation options
+
+            if options.all:
+                options.cap = True
+                options.sym = True
+                options.yrs = True
+                options.wcs = True
+
+            if options.cap or options.sym or options.yrs or options.wcs:
+                pass
+            else:
+                print('No options supplied, Quitting.')
+                exit()
+
+
+            ##
+            ## i/o files
+                
+            if os.path.isfile(options.input_file):
+                try:
+                    inf = open(options.input_file, 'r')
+
+                except IOError:
+                    print('Error opening {}, Quitting.'.format(options.input_file))
+                    exit()
+
+                    
+            else:
+                print('Cannot find input file \'{}\', Quitting.'.format(options.input_file))
+                exit()
+
+            if options.output_file:
+                try:
+                    ouf = open(options.output_file, 'w')
+
+                except IOError:
+                    print('Error opening output file {}, Quitting.')
+                    exit()
+
+            else:
+                print('No output file specified, Quitting.')
+                exit()
+
+                    
+                ## if we got here we must have enough to work with
+                ##
+                
+                pass
+            
     
-                pass
         except:
-                pass
+                print('Unexpected error occoured. Quitting.')
                 exit()
 
 
